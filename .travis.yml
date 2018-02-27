@@ -1,0 +1,19 @@
+language: php
+
+php:
+  - '7.1'
+  - '7.2'
+  
+before_script:
+  - composer self-update
+  - composer --version
+
+install:
+  - composer install
+
+script:
+  - vendor/bin/phpunit
+
+after_script:
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover clover.xml

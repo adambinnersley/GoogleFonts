@@ -1,0 +1,23 @@
+build:
+    environment:
+        php: '7.1.0'
+            
+    tests:
+        override:
+            -
+                command: 'vendor/bin/phpunit --coverage-clover=coverage'
+                coverage:
+                    file: 'coverage'
+                    format: 'clover'
+
+before_commands:
+    - "composer install --prefer-source"
+
+checks:
+    php:
+        code_rating: true
+        duplication: true
+
+filter:
+    excluded_paths:
+        - tests/*
