@@ -3,11 +3,12 @@ namespace Fonts;
 
 use GuzzleHttp\Client;
 
-class GoogleFonts {
+class GoogleFonts
+{
 
     const WEBFONTURL = 'https://www.googleapis.com/webfonts/v1/webfonts';
     
-    CONST SORT_BY = array(
+    const SORT_BY = array(
         'alpha',
         'date',
         'popularity',
@@ -17,13 +18,13 @@ class GoogleFonts {
     
     /**
      * Google API key string
-     * @var string 
+     * @var string
      */
     private $apiKey;
     
     /**
      * The location where the temporary JSON file should be stored
-     * @var string 
+     * @var string
      */
     protected $file_location;
 
@@ -35,19 +36,19 @@ class GoogleFonts {
     
     /**
      * This is the original font array retrieved from Google
-     * @var array 
+     * @var array
      */
     protected $fontList;
     
     /**
      * This is the array of fonts ordered into types
-     * @var array 
+     * @var array
      */
     protected $orderedList;
     
     /**
      * Error message to be displayed if no fonts exists
-     * @var string 
+     * @var string
      */
     public $error_message = 'Error: No fonts exist with the given parameters';
     
@@ -55,7 +56,8 @@ class GoogleFonts {
      * Constructor
      * @param string|false $apiKey This should either be set to your Google API key or left empty
      */
-    public function __construct($apiKey = false) {
+    public function __construct($apiKey = false)
+    {
         $this->setAPIKey($apiKey);
         $this->setFontFileLocation(dirname(dirname(__FILE__)).'/fonts/');
     }
@@ -65,8 +67,9 @@ class GoogleFonts {
      * @param string $apiKey This needs to be your Google API Key
      * @return $this
      */
-    public function setApiKey($apiKey) {
-        if(is_string($apiKey) && !empty(trim($apiKey))) {
+    public function setApiKey($apiKey)
+    {
+        if (is_string($apiKey) && !empty(trim($apiKey))) {
             $this->apiKey = trim($apiKey);
         }
         return $this;
@@ -76,8 +79,9 @@ class GoogleFonts {
      * Returns the Google API key if it has been set else will return false
      * @return string|false This sill be the set Google API key or false
      */
-    public function getApiKey() {
-        if(is_string($this->apiKey)) {
+    public function getApiKey()
+    {
+        if (is_string($this->apiKey)) {
             return $this->apiKey;
         }
         return false;
@@ -88,10 +92,11 @@ class GoogleFonts {
      * @param string $location This should be the location that you wish to store the font list files
      * @return $this
      */
-    public function setFontFileLocation($location) {
-        if(!empty(trim($location)) && is_string($location)) {
+    public function setFontFileLocation($location)
+    {
+        if (!empty(trim($location)) && is_string($location)) {
             $this->file_location = trim($location);
-            if(!is_dir($location)) {
+            if (!is_dir($location)) {
                 mkdir($location, 0777, true);
             }
         }
@@ -102,7 +107,8 @@ class GoogleFonts {
      * This is the location where the fonts file is stored
      * @return string Returns the file storage location
      */
-    public function getFontFileLocation() {
+    public function getFontFileLocation()
+    {
         return $this->file_location;
     }
     
@@ -110,7 +116,8 @@ class GoogleFonts {
      * Returns an array of weights available
      * @return array|string If any weights exist will return an array else will return the error_message
      */
-    public function getFontWeights() {
+    public function getFontWeights()
+    {
         return $this->listFontTypes();
     }
     
@@ -118,7 +125,8 @@ class GoogleFonts {
      * Returns an array of subsets available
      * @return array|string If any subsets exist will return an array else will return the error_message
      */
-    public function getFontSubsets() {
+    public function getFontSubsets()
+    {
         return $this->listFontTypes('subset');
     }
     
@@ -126,7 +134,8 @@ class GoogleFonts {
      * Returns an array of types/categories available
      * @return array|string If any types/categories exist will return an array else will return the error_message
      */
-    public function getFontTypes() {
+    public function getFontTypes()
+    {
         return $this->listFontTypes('type');
     }
     
@@ -135,9 +144,14 @@ class GoogleFonts {
      * @param string $weight This should be the weight value
      * @return array|string
      */
-    public function getFontsByWeight($weight) {
-        if($weight == '400') {$weight = 'regular';}
-        if($weight == '400italic') {$weight = 'italic';}
+    public function getFontsByWeight($weight)
+    {
+        if ($weight == '400') {
+            $weight = 'regular';
+        }
+        if ($weight == '400italic') {
+            $weight = 'italic';
+        }
         return $this->listFonts(strtolower($weight));
     }
     
@@ -146,7 +160,8 @@ class GoogleFonts {
      * @param string $subset This should be the subset you ant to list the fonts by
      * @return array|string If any fonts exists an array will be returned else the error message will be returned
      */
-    public function getFontsBySubset($subset) {
+    public function getFontsBySubset($subset)
+    {
         return $this->listFonts(strtolower($subset), 'subset');
     }
     
@@ -155,7 +170,8 @@ class GoogleFonts {
      * @param string $style This should be the font type that you want to list fonts by
      * @return array|string If any fonts exists an array will be returned else the error message will be returned
      */
-    public function getFontsByType($style) {
+    public function getFontsByType($style)
+    {
         return $this->listFonts(strtolower($style), 'type');
     }
     
@@ -165,9 +181,10 @@ class GoogleFonts {
      * @param array $font this should be the font information array
      * @param string $style The main array item that you want to sort the font within e.g. weight, subset or category
      */
-    protected function sortFontType($types, $font, $style = 'type') {
-        if(is_array($types)) {
-            foreach($types as $type) {
+    protected function sortFontType($types, $font, $style = 'type')
+    {
+        if (is_array($types)) {
+            foreach ($types as $type) {
                 $this->orderedList[$style][$type][$font['family']] = array(($style === 'weight' ? 'file' : 'files') => ($style === 'weight' ? $font['files'][$type] : $font['files']));
             }
         } else {
@@ -178,10 +195,11 @@ class GoogleFonts {
     /**
      * Retrieve a list of all of the fonts from Google Fonts API
      */
-    protected function retrieveFonts() {
+    protected function retrieveFonts()
+    {
         $guzzle = new Client();
         $fonts = $guzzle->request('GET', $this->googleFontsURI());
-        if($fonts->getStatusCode() === 200) {
+        if ($fonts->getStatusCode() === 200) {
             $this->fontList = json_decode($fonts->getBody(), true);
         }
     }
@@ -190,18 +208,20 @@ class GoogleFonts {
      * The Google fonts URL will be returned with the path information
      * @return string
      */
-    public function googleFontsURI() {
+    public function googleFontsURI()
+    {
         return self::WEBFONTURL . '?' . $this->buildQueryString();
     }
     
     /**
-     * Builds the formatted URI path to retrieve the list of fonts from Google 
+     * Builds the formatted URI path to retrieve the list of fonts from Google
      * @return string
      */
-    protected function buildQueryString() {
+    protected function buildQueryString()
+    {
         $queryString = array();
         $queryString['key'] = $this->getApiKey();
-        if($this->sortOrder) {
+        if ($this->sortOrder) {
             $queryString['sort'] = $this->sortOrder;
         }
         return http_build_query($queryString);
@@ -211,9 +231,10 @@ class GoogleFonts {
      * Retrieves the ordered Google Fonts file
      * @return boolean Returns true on success and false on failure
      */
-    protected function getJSONFile() {
-        if(!is_array($this->orderedList)) {
-            if(file_exists($this->getFontFileLocation().'/fonts.json') && ((time() - filemtime($this->getFontFileLocation().'/fonts.json')) < 86400)) {
+    protected function getJSONFile()
+    {
+        if (!is_array($this->orderedList)) {
+            if (file_exists($this->getFontFileLocation().'/fonts.json') && ((time() - filemtime($this->getFontFileLocation().'/fonts.json')) < 86400)) {
                 $this->orderedList = json_decode(file_get_contents($this->getFontFileLocation().'fonts.json'), true);
                 return true;
             }
@@ -225,10 +246,11 @@ class GoogleFonts {
      * Sorts all of the fonts into a custom JSON file
      * @return boolean If the file has successfully been created will return true else retruns false
      */
-    protected function sortFonts() {
+    protected function sortFonts()
+    {
         $this->retrieveFonts();
-        if(is_array($this->fontList)) {
-            foreach($this->fontList['items'] as $font) {
+        if (is_array($this->fontList)) {
+            foreach ($this->fontList['items'] as $font) {
                 $this->sortFontType($font['category'], $font);
                 $this->sortFontType($font['variants'], $font, 'weight');
                 $this->sortFontType($font['subsets'], $font, 'subset');
@@ -242,7 +264,8 @@ class GoogleFonts {
      * Creates the temporary file containing the list of fonts
      * @return boolean Returns true on success false on failure
      */
-    protected function createJSONFile() {
+    protected function createJSONFile()
+    {
         $fp = fopen($this->getFontFileLocation().'/fonts.json', 'w');
         fwrite($fp, json_encode($this->orderedList));
         return fclose($fp);
@@ -253,9 +276,10 @@ class GoogleFonts {
      * @param string $list The type that you are listing
      * @return array|string If any types exist an array will be returned else will return the error message
      */
-    protected function listFontTypes($list = 'weight') {
+    protected function listFontTypes($list = 'weight')
+    {
         $this->getJSONFile();
-        if(array_key_exists($list, $this->orderedList)) {
+        if (array_key_exists($list, $this->orderedList)) {
             $array = array_keys($this->orderedList[$list]);
             sort($array);
             return $array;
@@ -269,9 +293,10 @@ class GoogleFonts {
      * @param string $list This needs to be the value that you are searching on
      * @return array|string If any fonts exist for the given parameters an array will be returned else will return the error message
      */
-    protected function listFonts($option, $list = 'weight') {
+    protected function listFonts($option, $list = 'weight')
+    {
         $this->getJSONFile();
-        if(array_key_exists($option, $this->orderedList[$list])) {
+        if (array_key_exists($option, $this->orderedList[$list])) {
             $array = array_keys($this->orderedList[$list][$option]);
             return $array;
         }

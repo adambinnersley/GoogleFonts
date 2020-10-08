@@ -3,10 +3,10 @@
     "description": "Get a list of Google Fonts and search by type or weight",
     "type": "library",
     "require": {
-        "guzzlehttp/guzzle": "^6.3"
+        "guzzlehttp/guzzle": "^7.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.0"
+        "phpunit/phpunit": "^9.0"
     },
     "license": "MIT",
     "authors": [

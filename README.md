@@ -63,7 +63,6 @@ You can list the available options using 1 of 3 different methods (getFontWeight
 
 ##### PHP
 ```php
-
 $weights = $fonts->getFontWeights();
 print_r($weights);
 ```

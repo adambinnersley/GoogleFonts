@@ -5,7 +5,8 @@ namespace Fonts\Tests;
 use PHPUnit\Framework\TestCase;
 use Fonts\GoogleFonts;
 
-class GoogleFontsTest extends TestCase{
+class GoogleFontsTest extends TestCase
+{
     protected $googleFonts;
     
     private $testAPIKey = 'fake_key';
@@ -15,11 +16,13 @@ class GoogleFontsTest extends TestCase{
      * @covers Fonts\GoogleFonts::setAPIKey
      * @covers Fonts\GoogleFonts::setFontFileLocation
      */
-    public function setUp() {
+    public function setUp(): void
+    {
         $this->googleFonts = new GoogleFonts();
     }
     
-    public function tearDown() {
+    public function tearDown(): void
+    {
         $this->googleFonts = null;
     }
     
@@ -28,7 +31,8 @@ class GoogleFontsTest extends TestCase{
      * @covers Fonts\GoogleFonts::setApiKey
      * @covers Fonts\GoogleFonts::getApiKey
      */
-    public function testAPIKey() {
+    public function testAPIKey()
+    {
         $this->assertFalse($this->googleFonts->getApiKey());
         $this->assertObjectHasAttribute('sortOrder', $this->googleFonts->setApiKey(34534534535));
         $this->assertFalse($this->googleFonts->getApiKey());
@@ -40,7 +44,8 @@ class GoogleFontsTest extends TestCase{
      * @covers Fonts\GoogleFonts::setFontFileLocation
      * @covers Fonts\GoogleFonts::getFontFileLocation
      */
-    public function testFileLocation() {
+    public function testFileLocation()
+    {
         $this->assertEquals(dirname(dirname(__FILE__)).'/fonts/', $this->googleFonts->getFontFileLocation());
         $this->assertObjectHasAttribute('sortOrder', $this->googleFonts->setFontFileLocation(false));
         $this->assertEquals(dirname(dirname(__FILE__)).'/fonts/', $this->googleFonts->getFontFileLocation());
@@ -60,7 +65,8 @@ class GoogleFontsTest extends TestCase{
      * @covers Fonts\GoogleFonts::sortFontType
      * @covers Fonts\GoogleFonts::createJSONFile
      */
-    public function testListFontWeights(){
+    public function testListFontWeights()
+    {
         if (!isset($_SERVER['GOOGLE_API_KEY'])) {
             $this->markTestSkipped('You need to configure the GOOGLE_API_KEY value in phpunit.xml');
         }
@@ -79,7 +85,8 @@ class GoogleFontsTest extends TestCase{
      * @covers Fonts\GoogleFonts::sortFontType
      * @covers Fonts\GoogleFonts::createJSONFile
      */
-    public function testListFontByWeight(){
+    public function testListFontByWeight()
+    {
         if (!isset($_SERVER['GOOGLE_API_KEY'])) {
             $this->markTestSkipped('You need to configure the GOOGLE_API_KEY value in phpunit.xml');
         }
@@ -98,7 +105,8 @@ class GoogleFontsTest extends TestCase{
      * @covers Fonts\GoogleFonts::sortFontType
      * @covers Fonts\GoogleFonts::createJSONFile
      */
-    public function testListFontSubsets(){
+    public function testListFontSubsets()
+    {
         if (!isset($_SERVER['GOOGLE_API_KEY'])) {
             $this->markTestSkipped('You need to configure the GOOGLE_API_KEY value in phpunit.xml');
         }
@@ -116,7 +124,8 @@ class GoogleFontsTest extends TestCase{
      * @covers Fonts\GoogleFonts::sortFontType
      * @covers Fonts\GoogleFonts::createJSONFile
      */
-    public function testListFontBySubset(){
+    public function testListFontBySubset()
+    {
         if (!isset($_SERVER['GOOGLE_API_KEY'])) {
             $this->markTestSkipped('You need to configure the GOOGLE_API_KEY value in phpunit.xml');
         }
@@ -135,7 +144,8 @@ class GoogleFontsTest extends TestCase{
      * @covers Fonts\GoogleFonts::sortFontType
      * @covers Fonts\GoogleFonts::createJSONFile
      */
-    public function testListFontTypes(){
+    public function testListFontTypes()
+    {
         if (!isset($_SERVER['GOOGLE_API_KEY'])) {
             $this->markTestSkipped('You need to configure the GOOGLE_API_KEY value in phpunit.xml');
         }
@@ -154,7 +164,8 @@ class GoogleFontsTest extends TestCase{
      * @covers Fonts\GoogleFonts::sortFontType
      * @covers Fonts\GoogleFonts::createJSONFile
      */
-    public function testListFontByTypes(){
+    public function testListFontByTypes()
+    {
         if (!isset($_SERVER['GOOGLE_API_KEY'])) {
             $this->markTestSkipped('You need to configure the GOOGLE_API_KEY value in phpunit.xml');
         }
@@ -162,5 +173,4 @@ class GoogleFontsTest extends TestCase{
         $this->assertEquals('Lobster', $this->googleFonts->getFontsByType('display')[0]);
         $this->assertContains('Error', $this->googleFonts->getFontsByType(457544));
     }
-    
 }
