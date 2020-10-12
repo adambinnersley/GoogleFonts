@@ -8,13 +8,13 @@ class GoogleFonts
 
     const WEBFONTURL = 'https://www.googleapis.com/webfonts/v1/webfonts';
     
-    const SORT_BY = array(
+    const SORT_BY = [
         'alpha',
         'date',
         'popularity',
         'style',
         'trending'
-    );
+    ];
     
     /**
      * Google API key string
@@ -64,7 +64,7 @@ class GoogleFonts
     
     /**
      * Sets the Google API Key
-     * @param string $apiKey This needs to be your Google API Key
+     * @param string|false $apiKey This needs to be your Google API Key
      * @return $this
      */
     public function setApiKey($apiKey)
@@ -185,10 +185,10 @@ class GoogleFonts
     {
         if (is_array($types)) {
             foreach ($types as $type) {
-                $this->orderedList[$style][$type][$font['family']] = array(($style === 'weight' ? 'file' : 'files') => ($style === 'weight' ? $font['files'][$type] : $font['files']));
+                $this->orderedList[$style][$type][$font['family']] = [($style === 'weight' ? 'file' : 'files') => ($style === 'weight' ? $font['files'][$type] : $font['files'])];
             }
         } else {
-            $this->orderedList[$style][$types][$font['family']] = array('files' => $font['files']);
+            $this->orderedList[$style][$types][$font['family']] = ['files' => $font['files']];
         }
     }
     
@@ -219,7 +219,7 @@ class GoogleFonts
      */
     protected function buildQueryString()
     {
-        $queryString = array();
+        $queryString = [];
         $queryString['key'] = $this->getApiKey();
         if ($this->sortOrder) {
             $queryString['sort'] = $this->sortOrder;
