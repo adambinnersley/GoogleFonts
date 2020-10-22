@@ -92,7 +92,7 @@ class GoogleFontsTest extends TestCase
         }
         $this->googleFonts->setApiKey($_SERVER['GOOGLE_API_KEY']);
         $this->assertEquals('Roboto', $this->googleFonts->getFontsByWeight(300)[0]);
-        $this->assertContains('Error', $this->googleFonts->getFontsByWeight('hello-world'));
+        $this->assertStringContainsString('Error', $this->googleFonts->getFontsByWeight('hello-world'));
     }
 
     /**
@@ -131,7 +131,7 @@ class GoogleFontsTest extends TestCase
         }
         $this->googleFonts->setApiKey($_SERVER['GOOGLE_API_KEY']);
         $this->assertEquals('Roboto', $this->googleFonts->getFontsBySubset('latin')[0]);
-        $this->assertContains('Error', $this->googleFonts->getFontsBySubset('hello-world'));
+        $this->assertStringContainsString('Error', $this->googleFonts->getFontsBySubset('hello-world'));
     }
     
     /**
@@ -170,7 +170,7 @@ class GoogleFontsTest extends TestCase
             $this->markTestSkipped('You need to configure the GOOGLE_API_KEY value in phpunit.xml');
         }
         $this->googleFonts->setApiKey($_SERVER['GOOGLE_API_KEY']);
-        $this->assertEquals('Lobster', $this->googleFonts->getFontsByType('display')[0]);
-        $this->assertContains('Error', $this->googleFonts->getFontsByType(457544));
+        $this->assertEquals('Bebas Neue', $this->googleFonts->getFontsByType('display')[0]);
+        $this->assertStringContainsString('Error', $this->googleFonts->getFontsByType(457544));
     }
 }
